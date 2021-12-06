@@ -47,7 +47,12 @@ function distribution(mean, stdDev) {
  * @return {number} The arithmetic mean of the elements in the array x
  */
 function mean(x) {
-    return 0;
+    let sum = 0;
+    x.forEach(function(e) {
+        sum += e;
+    });
+
+    return Math.round(sum / x.length * 10000) / 10000;
 }
 
 /**
@@ -72,7 +77,13 @@ function mean(x) {
  */
 
 function standardDeviation(x) {
-    return 0;
+    const m = mean(x);
+    let sum = 0;
+    x.forEach(function(e) {
+        sum += (e - m) ** 2;
+    });
+
+    return Math.round(Math.sqrt(sum / (x.length - 1)) * 10000) / 10000;
 }
 
 /**
@@ -86,7 +97,9 @@ function standardDeviation(x) {
  * @return {number} The probability of Pr(X ≤ 1.2) when X is N(0,1) with 4 decimal precision
  */
 function exercise01() {
-    return 0;
+    const dist = distribution(0, 1);
+
+    return Math.round(dist.cdf(1.2) * 10000) / 10000;
 }
 
 /**
@@ -100,7 +113,9 @@ function exercise01() {
  * @return {number} The probability of Pr(X > 1.2) when X is N(0,1) with 4 decimal precision
  */
 function exercise02() {
-    return 0;
+    const dist = distribution(0, 1);
+
+    return Math.round((1 - dist.cdf(1.2)) * 10000) / 10000;
 }
 
 /**
@@ -114,7 +129,9 @@ function exercise02() {
  * @return {number} The probability of Pr(X ≤ 7) when X is N(5,2) with 4 decimal precision
  */
 function exercise03() {
-    return 0;
+    const dist = distribution(5, 2);
+
+    return Math.round(dist.cdf(7) * 10000) / 10000;
 }
 
 /**
@@ -128,7 +145,10 @@ function exercise03() {
  * @return {number} The probability of Pr(3 < X ≤ 5) when X is N(5,2) with 4 decimal precision
  */
 function exercise04() {
-    return 0;
+    const dist = distribution(5, 2);
+    const p = dist.cdf(5) - dist.cdf(3);
+
+    return Math.round(p * 10000) / 10000;
 }
 
 /**
@@ -142,7 +162,8 @@ function exercise04() {
  * @return {number} The probability of Pr(X ≤ -1) when X is N(0,1) with 4 decimal precision
  */
 function exercise05() {
-    return 0;
+    const dist = distribution(0, 1);
+    return Math.round(dist.cdf(-1) * 10000) / 10000;
 }
 
 /**
@@ -167,7 +188,10 @@ function exercise05() {
  * N(μ,σ) with 4 decimal precision
  */
 function exercise06(mean, stdDev, a, b) {
-    return 0;
+    const dist = distribution(mean, stdDev);
+    const p = dist.cdf(b) - dist.cdf(a);
+
+    return Math.round(p * 10000) / 10000;
 }
 
 /**
@@ -195,7 +219,11 @@ function exercise06(mean, stdDev, a, b) {
  *
  */
 function exercise07() {
-    return 0;
+    const mean = 1.8;
+    const stdDev = 0.1;
+    const dist = distribution(mean, stdDev);
+
+    return Math.round((1 - dist.cdf(2)) * 1000) / 1000;
 }
 
 /**
@@ -216,7 +244,12 @@ function exercise07() {
  * @return {number}
  */
 function exercise08() {
-    return 0;
+    const a = 2, b = 3, c = 1, d = 4;
+    const mean = a + c;
+    const stdDev = Math.sqrt(b ** 2 + d ** 2);
+    const dist = distribution(mean, stdDev);
+    
+    return Math.round(dist.cdf(2) * 10000) / 10000;
 }
 
 /**
@@ -242,7 +275,12 @@ function exercise08() {
  * Hint. Pr(X > Y)= Pr(X-Y > 0)
  */
 function exercise09() {
-    return 0;
+    const a = 48, b = 5, c = 40, d = 4;
+    const mean = a - c;
+    const stdDev = Math.sqrt(b ** 2 + d ** 2);
+    const dist = distribution(mean, stdDev);
+    
+    return Math.round((1 - dist.cdf(0)) * 10000) / 10000;
 }
 
 /**
@@ -263,7 +301,7 @@ function exercise09() {
  * @param {Number} b is a constant
  */
 function exercise10(eX, a, b) {
-    return 0;
+    return  a * eX + b;
 }
 
 /**
@@ -284,7 +322,8 @@ function exercise10(eX, a, b) {
  * @param {Number} b is a constant
  */
 function exercise11(vX, a, b) {
-    return 0;
+    const vY = a ** 2 * vX;
+    return vY;
 }
 
 /**
@@ -305,7 +344,12 @@ function exercise11(vX, a, b) {
  * @return {Number} The probability of profit with 4 decimals
  */
 function exercise12() {
-    return 0;
+    // formula: P = nCx * p^x * (1-p)^(n-x) = n! / (r! * (n-r)!) * p^x * (1-p)^(n-x)
+    const P0 = 1 * Math.pow(0.05, 0) * Math.pow(0.95, 50);
+    const P1 = 50 * Math.pow(0.05, 1) * Math.pow(0.95, 49);
+    const P2 = (49 * 50 / 2) * Math.pow(0.05, 2) * Math.pow(0.95, 48);
+
+    return Math.round((1 - P0 - P1 - P2) * 10000) / 10000;
 }
 
 /**
@@ -322,7 +366,14 @@ function exercise12() {
  * @return {Number} Difference between exercise12 and its Poisson approximation
  */
 function exercise13() {
-    return 0;
+    // formula: P(x=k) = (Ev ^ k) * (e ^ (-Ev)) / k!
+    const Ev = 50 * 0.05;
+    const P0 = Math.pow(Ev, 0) * Math.exp(-Ev) / 1;
+    const P1 = Math.pow(Ev, 1) * Math.exp(-Ev) / 1;
+    const P2 = Math.pow(Ev, 2) * Math.exp(-Ev) / 2;
+    const P = Math.round((1 - P0 - P1 - P2) * 10000) / 10000;
+
+    return P - exercise12();
 }
 
 /**
@@ -349,7 +400,23 @@ function exercise13() {
  * @return {Number} Correlation coefficient between A and B with 4 decimals. 
  */
 function exercise14(pA, pB) {
-    return 0;
+    const A = [0.1, 0.2, 0.3, 0.4];
+    const B = [0.2, 0.3, 0.3, 0.2];
+    let sumPa = 0, sumPb = 0, sumPa2 = 0, sumPb2 = 0, sumPab = 0;
+    let n = A.length;
+    
+    for (let i = 0; i < A.length; i++) {
+        sumPa += A[i];
+        sumPb += B[i];
+        sumPa2 += A[i] ** 2;
+        sumPb2 += B[i] ** 2;
+        sumPab += A[i] * B[i];
+    }
+    // return Math.round(sumPab * 10000) / 10000;
+
+    const r = (n *sumPab - sumPa * sumPb) / (Math.sqrt(n * sumPa2 - sumPa ** 2) * Math.sqrt(n * sumPb2 - sumPb ** 2));
+    
+    return Math.round(r * 10000) / 10000;
 }
 
 /**
