@@ -400,23 +400,23 @@ function exercise13() {
  * @return {Number} Correlation coefficient between A and B with 4 decimals. 
  */
 function exercise14(pA, pB) {
-    const A = [0.1, 0.2, 0.3, 0.4];
-    const B = [0.2, 0.3, 0.3, 0.2];
-    let sumPa = 0, sumPb = 0, sumPa2 = 0, sumPb2 = 0, sumPab = 0;
-    let n = A.length;
-    
-    for (let i = 0; i < A.length; i++) {
-        sumPa += A[i];
-        sumPb += B[i];
-        sumPa2 += A[i] ** 2;
-        sumPb2 += B[i] ** 2;
-        sumPab += A[i] * B[i];
-    }
-    // return Math.round(sumPab * 10000) / 10000;
+    // formula for correlation coefficient
+    // CCAB = CovAB / sqrt(VarA * VarB)
 
-    const r = (n *sumPab - sumPa * sumPb) / (Math.sqrt(n * sumPa2 - sumPa ** 2) * Math.sqrt(n * sumPb2 - sumPb ** 2));
-    
-    return Math.round(r * 10000) / 10000;
+    // VarA = n * pA * (1 - pA)
+    const varA = 1 * pA * (1 - pA);
+
+    // VarB = n * pB * (1 - pB)
+    const varB = 1 * pB * (1 - pB);
+
+    // CovAB = (VarAB - VarA - VarB) / 2
+    // VarAB = n * (pA + pB) * (1 - pA - pB)
+    const varAB = 1 * (pA + pB) * (1 - pA - pB);
+    const covAB = (varAB - varA - varB) / 2;
+
+    const ccAB = covAB / Math.sqrt(varA * varB);
+
+    return Math.round(ccAB * 10000) / 10000;
 }
 
 /**
@@ -444,7 +444,21 @@ function exercise14(pA, pB) {
  * @return {Number} Minutes needed for the meeting rounded up.
  */
 function exercise15() {
-    return 0;
+   const n = 36;
+   const standardDeviation = 1;
+   const mean = 3;
+      
+   // E = n * standardDeviation
+   const expect = n * mean;
+
+   // sdS = sqrt(n) * standardDeviation
+   const sdS = Math.sqrt(n) * standardDeviation;
+
+   // 95% according to table, 1 - 0.95 = 0.05, 1.6554
+   // Pr(X < x) = Pr(Z > (x - expect) / sdS = 1.6554) = 95%
+   const x = (1.6554 * sdS) + expect;
+
+   return Math.round(x);
 }
 
 
